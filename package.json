@@ -1,0 +1,14 @@
+{
+  "name": "my-cafe-blog-api",
+  "version": "0.0.1",
+  "description": "my-cafe-blog-api",
+  "main": "index.js",
+  "author": "alice.kurasame@gmail.com",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
