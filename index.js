@@ -3,7 +3,9 @@ const express = require('express');
 const app = express();
 
 app.get('/', function (req, res) {
-    res.send('hello world')
-  })
+  res.send('hello world')
+})
 
-app.listen(8080);
+console.log('success')
+
+app.listen(3000);
