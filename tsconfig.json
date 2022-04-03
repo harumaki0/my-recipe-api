@@ -5,11 +5,13 @@
          "es6"
       ],
       "target": "es5",
-      "module": "commonjs",
+      "module": "commonJS",
       "moduleResolution": "node",
       "outDir": "./build",
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
-      "sourceMap": true
+      "sourceMap": true,
+      "noImplicitAny": false,
+      "esModuleInterop": true
    }
 }

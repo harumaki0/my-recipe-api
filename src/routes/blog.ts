@@ -1,9 +1,10 @@
 const express = require('express');
+import getBlogs from '../query/blog';
 
 const app = express();
 
-app.get('/', function (req, res) {
-    res.send('hello world')
-})
-  
-module.exports = router;
+  app.get('/', async function (req, res) {
+    const blogs = await getBlogs()
+    console.dir(blogs)
+    res.json(blogs)
+  })

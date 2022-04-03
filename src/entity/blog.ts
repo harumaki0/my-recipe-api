@@ -11,4 +11,7 @@ export class Blog{
 
     @Column()
     created_at: Date;
+
+    @Column()
+    title: string;
 }
