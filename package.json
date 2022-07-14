@@ -1,7 +1,7 @@
 {
-   "name": "my-cafe-blog-api",
+   "name": "my-cafe-recipe-api",
    "version": "0.0.1",
-   "description": "my-cafe-blog-api",
+   "description": "my-cafe-recipe-api",
    "main": "index.js",
    "author": "alice.kurasame@gmail.com",
    "license": "MIT",
@@ -13,7 +13,6 @@
    "dependencies": {
       "db-migrate-mysql": "^2.2.0",
       "express": "^4.17.2",
-      "mysql": "^2.14.1",
       "mysql2": "^2.3.3",
       "reflect-metadata": "^0.1.13",
       "typeorm": "0.2.43"

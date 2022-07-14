@@ -14,18 +14,15 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function (db) {
-    db.createTable('blog', {
-    blog_id: {type: 'int', primaryKey: true},
-    content: 'string',
-    created_at: 'Date'
+exports.up = function(db) {
+  return db.createTable('recipe', {
+    id: { type: 'int', primaryKey: true },
+    name: 'string'
   });
-  return null;
 };
 
-exports.down = function (db) {
-  db.dropTable('blog');
-  return null;
+exports.down = function(db) {
+  return db.dropTable('recipe');
 };
 
 exports._meta = {

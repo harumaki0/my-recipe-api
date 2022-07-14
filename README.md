@@ -1,4 +1,4 @@
-# my-cafe-blog-api
+# my-cafe-recipe-api
 
 ## 実行
 

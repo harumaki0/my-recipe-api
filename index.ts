@@ -1,5 +1,5 @@
 import express from 'express';
-import getBlog from './src/query/blog';
+import { getRecipes, getRecipePage } from './src/query/recipe';
 import { createConnection } from "typeorm";
 
 createConnection({
@@ -8,7 +8,7 @@ createConnection({
     port: 3306,
     username: "root",
     password: "ecfo76",
-    database: "migration",
+    database: "recipe",
     entities: [
       "src/entity/*.ts"
     ],
@@ -17,14 +17,18 @@ createConnection({
   const app: express.Express = express()
 
   app.get('/', async function (req, res) {
-    const blog = await getBlog()
-    console.dir(blog)
-    res.json(blog)
-})
+    const recipes = await getRecipes()
+    console.dir(recipes)
+    res.json(recipes)
+  })
+  app.get('/recipe/:id', async function (req, res) {
+    const recipePage = await getRecipePage(req.params.id)
+    res.json(recipePage)
+  })
 
-console.log('success')
+  console.log('success')
 
-app.listen(3000);
+  app.listen(3000);
 }).catch(error => console.log(error));
 
 
