@@ -1,6 +1,6 @@
 import express from 'express';
-import { getRecipes, getRecipePage } from './src/query/recipe';
 import { createConnection } from "typeorm";
+import { router } from "./src/routes";
 
 createConnection({
     type: "mysql",
@@ -15,16 +15,9 @@ createConnection({
     synchronize: true,
 }).then(connection => {
   const app: express.Express = express()
-
-  app.get('/', async function (req, res) {
-    const recipes = await getRecipes()
-    console.dir(recipes)
-    res.json(recipes)
-  })
-  app.get('/recipe/:id', async function (req, res) {
-    const recipePage = await getRecipePage(req.params.id)
-    res.json(recipePage)
-  })
+  app.use(express.json());
+  app.use('/images', express.static('src/images'))
+  router(app)
 
   console.log('success')
 

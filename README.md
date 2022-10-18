@@ -1,4 +1,4 @@
-# my-cafe-recipe-api
+# my-recipe-api
 
 ## 実行
 
