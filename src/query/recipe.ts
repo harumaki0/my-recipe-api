@@ -6,20 +6,54 @@ import {
 } from "typeorm";
 import { Recipe } from "../entity/recipe";
 
-export async function getRecipes(page: number) {
-    console.log(page)
+export async function getRecipes(user_id: number, page: number) {
+  console.log(page);
+  //SQL作成
   const query = getConnection()
     .getRepository(Recipe)
     .createQueryBuilder()
     .select()
+    .where("user_id = :user_id", { user_id: user_id })
     .skip(6 * (page - 1))
-    .take(6 * page);
-    // .where("recipe.id > :id", { id: 6 * (page - 1) })
-    // .andWhere("recipe.id <= :id", { id: 6 * page })
+    .take(6);
+  console.log(query.getSql());
+  //実行
+  const recipes = await query.getMany();
+
+  const query2 = getConnection()
+    .getRepository(Recipe)
+    .createQueryBuilder()
+    .select()
+    .where("user_id = :user_id", { user_id: user_id })
+    .getCount();
+  const count = await query2;
+  console.log(count);
+  return { recipes, count };
+}
+
+export async function getFavorite(page: number) {
+  //1ページ分のレシピを取得
+  const query = getConnection()
+    .getRepository(Recipe)
+    .createQueryBuilder()
+    .select()
+    .where("recipe.favorite = :favorite", { favorite: 1 })
+    .skip(6 * (page - 1))
+    .take(6);
   console.log(query.getSql());
   const recipes = await query.getMany();
 
-  return recipes;
+  //全ての件数を取得
+  const query2 = getConnection()
+    .getRepository(Recipe)
+    .createQueryBuilder()
+    .where("recipe.favorite = :favorite", { favorite: 1 })
+    .select()
+    .getCount();
+  const count = await query2;
+  console.log(count);
+
+  return { recipes, count };
 }
 
 export async function getRecipePage(id: string) {
@@ -89,3 +123,12 @@ export async function updateRecipe(params: {
     .execute();
 }
 
+export async function clearRecipe(params: { id: number }) {
+  const query = getConnection()
+    .createQueryBuilder()
+    .delete()
+    .from(Recipe)
+    .where("recipe.id = :id", { id: params.id });
+  //実行
+  await query.execute();
+}

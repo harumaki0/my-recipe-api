@@ -22,4 +22,7 @@ export class Recipe {
 
   @Column()
   registration_date: string;
+
+  @Column()
+  user_id: number;
 }

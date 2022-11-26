@@ -4,9 +4,12 @@ import {
   getRecipePage,
   addRecipes,
   updateRecipe,
+  getFavorite,
+  clearRecipe,
 } from "../query/recipe";
 import multer from "multer";
 import path from "path";
+import { errorMessage } from "../error_message/message";
 
 const storage = multer.diskStorage({
   destination(req, file, callback) {
@@ -38,29 +41,38 @@ const router = express.Router();
 
 router.get("/", async function (req, res) {
   console.log(1);
-  if (req.query.id && typeof req.query.id === "string") {
-    const recipePage = await getRecipePage(req.query.id);
-    res.json(recipePage);
-    return;
-  }
-  if (req.query.page && typeof req.query.page === "string") {
-    const recipes = await getRecipes(Number(req.query.page));
-    console.dir(recipes);
-    res.json(recipes);
-    return;
-  }
+  const recipePage = await getRecipePage(String(req.query.id));
+  res.json(recipePage);
+});
+
+router.get("/list", async function (req, res) {
+  const recipes = await getRecipes(
+    Number(req.query.user_id),
+    Number(req.query.page)
+  );
+  console.dir(recipes);
+  res.json(recipes);
+});
+
+router.get("/favorite/list", async function (req, res) {
+  const recipePage = await getFavorite(Number(req.query.page));
+  res.json(recipePage);
 });
 
 router.post("/", upload.single("file"), async function (req, res) {
   // console.log(req.body);
   console.log((<any>req).file);
   try {
+    const fileName = (<any>req).file?.filename;
     const addRecipe = await addRecipes({
       id: <number>req.body.id,
       name: <string>req.body.name,
       reference: <string>req.body.reference,
       memo: <string>req.body.memo,
-      image: "http://localhost:3000/images/" + (<any>req).file.filename,
+      image:
+        fileName === undefined
+          ? ""
+          : "http://localhost:3000/images/" + fileName,
       registration_date: <string>req.body.registration_date,
       favorite: <string>req.body.favorite,
     });
@@ -68,7 +80,7 @@ router.post("/", upload.single("file"), async function (req, res) {
     res.json(req.body);
   } catch (error) {
     console.error(error);
-    res.json({ message: error.message });
+    res.json({ message: errorMessage.E01 });
   }
 });
 
@@ -88,7 +100,20 @@ router.post("/update", async function (req, res) {
     res.json(req.body);
   } catch (error) {
     console.error(error);
-    res.json({ message: error.message });
+    res.json({ message: errorMessage.E01 });
+  }
+});
+
+router.post("/delete", async function (req, res) {
+  console.log("削除完了");
+  try {
+    const clear = await clearRecipe({
+      id: <number>req.body.id,
+    });
+    res.json(req.body);
+  } catch (error) {
+    console.error(error);
+    res.json({ message: errorMessage.E01 });
   }
 });
 
