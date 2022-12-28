@@ -6,6 +6,27 @@ import {
 } from "typeorm";
 import { Recipe } from "../entity/recipe";
 
+export async function getRecipe(id: number) {
+  const query = getConnection()
+    .getRepository(Recipe)
+    .createQueryBuilder()
+    .select()
+    .where("recipe.id = :id", { id: id });
+
+  // SQL文を変数に代入しておく
+  const sql = query.getSql();
+
+  // 変数から取り出して出力
+  console.log(sql);
+  const recipe = await query.getOne();
+  return recipe;
+}
+export async function getAllRecipes() {
+  const query = getConnection().getRepository(Recipe).createQueryBuilder();
+  const recipes = await query.getMany();
+  return recipes;
+}
+
 export async function getRecipes(user_id: number, page: number) {
   console.log(page);
   //SQL作成
@@ -13,7 +34,7 @@ export async function getRecipes(user_id: number, page: number) {
     .getRepository(Recipe)
     .createQueryBuilder()
     .select()
-    .where("user_id = :user_id", { user_id: user_id })
+    .where("user_id = :id", { id: user_id })
     .skip(6 * (page - 1))
     .take(6);
   console.log(query.getSql());
@@ -24,7 +45,7 @@ export async function getRecipes(user_id: number, page: number) {
     .getRepository(Recipe)
     .createQueryBuilder()
     .select()
-    .where("user_id = :user_id", { user_id: user_id })
+    .where("user_id = :id", { id: user_id })
     .getCount();
   const count = await query2;
   console.log(count);
@@ -76,8 +97,9 @@ export async function addRecipes(params: {
   image: string;
   favorite: string;
   registration_date: string;
+  user_id: number;
 }) {
-  console.log("addRecipes");
+  console.log("addRecipe");
   console.log(params);
   await getConnection()
     .createQueryBuilder()
@@ -92,6 +114,7 @@ export async function addRecipes(params: {
         image: params.image,
         favorite: params.favorite,
         registration_date: params.registration_date,
+        user_id: params.user_id,
       },
     ])
     .execute();

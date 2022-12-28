@@ -1,5 +1,7 @@
 import express from "express";
 import {
+  getRecipe,
+  getAllRecipes,
   getRecipes,
   getRecipePage,
   addRecipes,
@@ -45,6 +47,11 @@ router.get("/", async function (req, res) {
   res.json(recipePage);
 });
 
+router.get("/all", async function (req, res) {
+  const recipeAll = await getAllRecipes();
+  res.json(recipeAll);
+});
+
 router.get("/list", async function (req, res) {
   const recipes = await getRecipes(
     Number(req.query.user_id),
@@ -52,6 +59,12 @@ router.get("/list", async function (req, res) {
   );
   console.dir(recipes);
   res.json(recipes);
+});
+
+router.get("/edit", async function (req, res) {
+  const recipe = await getRecipe(Number(req.query.id));
+  console.dir(recipe);
+  res.json(recipe);
 });
 
 router.get("/favorite/list", async function (req, res) {
@@ -75,6 +88,7 @@ router.post("/", upload.single("file"), async function (req, res) {
           : "http://localhost:3000/images/" + fileName,
       registration_date: <string>req.body.registration_date,
       favorite: <string>req.body.favorite,
+      user_id: <number>req.body.user_id,
     });
     // console.dir(addRecipe)
     res.json(req.body);
@@ -92,7 +106,6 @@ router.post("/update", async function (req, res) {
       name: <string>req.body.name,
       reference: <string>req.body.reference,
       memo: <string>req.body.memo,
-      // image: 'http://localhost:3000/images/' + (<any>req).file.filename,
       registration_date: <string>req.body.registration_date,
       favorite: <string>req.body.favorite,
     });

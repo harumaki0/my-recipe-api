@@ -1,5 +1,7 @@
 .idea/
 .vscode/
 node_modules/
-database.json
 .env
+.connection.ts
+.database.json
+.ormconfig.js
